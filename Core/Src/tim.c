@@ -44,7 +44,7 @@ void MX_TIM6_Init(void)
   htim6.Instance = TIM6;
   htim6.Init.Prescaler = 24; //16 MHz is too big value to put it into register, so we need to decrease is (max value is 65535)
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 64000 - 1; // Without (-1) we will need +1 tick to reach the update event
+  htim6.Init.Period = 60423;
 
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {

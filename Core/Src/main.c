@@ -93,24 +93,16 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  //Start the timer
-  HAL_TIM_Base_Start(&htim6);
+  //Start the timer with Interrupt
+  HAL_TIM_Base_Start_IT(&htim6);
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    //Loop until the update event flag is set
-    while (!(TIM6->SR & TIM_SR_UIF));
-    //The required time delay has been elapsed
-
-    //User code will be executed
-
-    //Clear the SR
-    TIM6->SR &= ~TIM_SR_UIF;
-
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -159,7 +151,9 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7);
+}
 /* USER CODE END 4 */
 
 /**
