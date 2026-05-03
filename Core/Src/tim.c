@@ -39,15 +39,19 @@ void MX_TIM6_Init(void)
   /* USER CODE BEGIN TIM6_Init 1 */
 
   /* USER CODE END TIM6_Init 1 */
+
+  //Configure TIM6 (high-level initialization)
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 0;
+  htim6.Init.Prescaler = 24; //16 MHz is too big value to put it into register, so we need to decrease is (max value is 65535)
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 65535;
-  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim6.Init.Period = 64000 - 1; // Without (-1) we will need +1 tick to reach the update event
+
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {
     Error_Handler();
   }
+
+  //
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
@@ -71,7 +75,10 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
     /* TIM6 clock enable */
     __HAL_RCC_TIM6_CLK_ENABLE();
   /* USER CODE BEGIN TIM6_MspInit 1 */
+  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn); //Enable IRQ for TIM6
 
+  //Set up the priority of TIM6 IRQ
+    HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
   /* USER CODE END TIM6_MspInit 1 */
   }
 }

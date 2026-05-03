@@ -46,6 +46,17 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
+    /* USER CODE 1 BEGIN MX_GPIO_Init */
+    GPIO_InitTypeDef led;
+    led.Pin = GPIO_PIN_7;
+    led.Mode = GPIO_MODE_OUTPUT_PP;
+    led.Pull = GPIO_NOPULL;
+    led.Speed = GPIO_SPEED_FREQ_LOW;
+
+    HAL_GPIO_Init(GPIOA, &led);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+    /* USER CODE 1 END MX_GPIO_Init */
+
 }
 
 /* USER CODE BEGIN 2 */
